@@ -3,10 +3,10 @@
 import base64
 import io
 import os
-import pyqrcode
 import sys
 import traceback
 
+import pyqrcode
 from PIL import Image
 
 from odoo import api, fields, exceptions, models, _
@@ -88,7 +88,8 @@ class AccountInvoice(models.Model):
         # Get the content of the QRCode from the invoice
         qr_content = self._generate_qrbill_content(invoice)
         # Create a QRCode from the content, Error M (up to 15% damage)
-        qr = pyqrcode.create(qr_content, error='M')
+        qr_content = qr_content.decode('latin-1').encode("utf-8")
+        qr = pyqrcode.create(qr_content, error='M', encoding="utf-8")
 
         # In memory Stream
         with io.BytesIO() as f:
